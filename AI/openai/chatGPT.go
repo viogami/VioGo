@@ -6,11 +6,13 @@ import (
 	"os"
 
 	openai "github.com/sashabaranov/go-openai"
+	config "github.com/viogami/viogo/conf"
 )
 
+var APIKey string
+var URL_PROXY string
+
 type ChatGPTService struct {
-	APIKey           string
-	URL_PROXY        string
 	Role             string
 	Character        string
 	characterSetting string
@@ -19,15 +21,16 @@ type ChatGPTService struct {
 }
 
 func NewChatGPTService() *ChatGPTService {
+	URL_PROXY = config.AppConfig.AIConfig.ChatGPTUrlProxy
+	APIKey = os.Getenv("ChatGPTAPIKey")
+
 	s := new(ChatGPTService)
-	s.APIKey = os.Getenv("ChatGPTAPIKey")
-	s.URL_PROXY = os.Getenv("ChatGPTURL_PROXY")
 	s.Role = openai.ChatMessageRoleUser
 	s.Character = "vio"
 	s.characterSetting = gpt_preset[s.Character]
 
-	conf := openai.DefaultConfig(s.APIKey)
-	conf.BaseURL = s.URL_PROXY
+	conf := openai.DefaultConfig(APIKey)
+	conf.BaseURL = URL_PROXY
 
 	s.client = openai.NewClientWithConfig(conf)
 

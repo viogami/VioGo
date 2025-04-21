@@ -43,11 +43,11 @@ func (c *cmdHuntSound) cqReply(soundUrl string) string {
 
 func (c *cmdHuntSound) GetInfo(index int) string {
 	switch index {
-	case 0:
+	case COMMAND_INFO_COMMAND:
 		return c.Command
-	case 1:
+	case COMMAND_INFO_DESCRIPTION:
 		return c.Description
-	case 2:
+	case COMMAND_INFO_CMD_TYPE:
 		return c.CmdType
 	}
 	return ""

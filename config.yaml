@@ -2,4 +2,5 @@ Services:
   redis_enabled: true
 
 AIconfig:
-  max_memory_size: 4096
+  chatgpt_url_proxy: "https://one-api.bltcy.top/v1"
+  deepseek_url: "https://api.deepseek.com/chat/completions"

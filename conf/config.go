@@ -19,7 +19,8 @@ type Services struct {
 }
 
 type AIconfig struct {
-	MaxMemorySize int `yaml:"max_memory_size"`
+	ChatGPTUrlProxy string `yaml:"chatgpt_url_proxy"`
+	DeepSeekUrl     string `yaml:"deepseek_url"`
 }
 
 // 初始化配置

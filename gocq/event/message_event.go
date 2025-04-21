@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
+	"strings"
 
 	"github.com/viogami/viogo/gocq/command"
 	"github.com/viogami/viogo/gocq/cqCode"
@@ -72,30 +73,39 @@ func (m *MessageEvent) Handle() {
 
 func (m *MessageEvent) parseCommand(cqmsg cqCode.CQmsg) command.Command {
 	cmdStr := cqmsg.Text
-	v, ok := command.CommandMap[cmdStr]
 
-	t := command.COMMAND_INFO_CMD_TYPE
+	// 遍历 CommandMap，检查是否有以 cmdStr 开头的命令
+	var matchedCommand command.Command
+	for key, cmd := range command.CommandMap {
+		if strings.HasPrefix(cmdStr, key) {
+			matchedCommand = cmd
+			break
+		}
+	}
+
+	t_info := command.COMMAND_INFO_CMD_TYPE
 	t_private := command.COMMAND_TYPE_PRIVATE
 	t_group := command.COMMAND_TYPE_GROUP
 	t_all := command.COMMAND_TYPE_ALL
+
 	// 判断是否是私聊消息
 	if m.MessageType == t_private {
-		if !ok || v == nil {
+		if matchedCommand == nil {
 			return command.CommandMap["/chat"]
 		}
-		if v.GetInfo(t) == t_private || v.GetInfo(t) == t_all {
-			return v
+		if matchedCommand.GetInfo(t_info) == t_private || matchedCommand.GetInfo(t_info) == t_all {
+			return matchedCommand
 		}
 		return command.CommandMap["/chat"]
 	}
 
 	// 判断是否是群聊消息
 	if m.MessageType == t_group && cqmsg.IsAtme(m.SelfID) {
-		if !ok || v == nil {
+		if matchedCommand == nil {
 			return command.CommandMap["/chat"]
 		}
-		if v.GetInfo(t) == t_group || v.GetInfo(t) == t_all {
-			return v
+		if matchedCommand.GetInfo(t_info) == t_group || matchedCommand.GetInfo(t_info) == t_all {
+			return matchedCommand
 		}
 	}
 	return nil

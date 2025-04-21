@@ -28,6 +28,7 @@ var CommandList = []Command{
 	newCmdHuntSound(),
 	newCmdBanLottery(),
 	newCmdGetRecall(),
+	newCmdSharpRep(),
 }
 var CommandMap = map[string]Command{
 	"help":    newCmdHelp(),
@@ -37,6 +38,7 @@ var CommandMap = map[string]Command{
 	"打一枪听听":   newCmdHuntSound(),
 	"禁言抽奖":    newCmdBanLottery(),
 	"撤回了什么":   newCmdGetRecall(),
+	"锐评一下":      newCmdSharpRep(),
 }
 
 const (

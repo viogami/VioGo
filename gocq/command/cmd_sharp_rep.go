@@ -7,29 +7,27 @@ import (
 	"github.com/viogami/viogo/gocq"
 )
 
-type cmdChat struct {
+type cmdSharpRep struct {
 	Command     string // 指令名称
 	Description string // 指令描述
 	CmdType     string // 指令类型
 }
 
-func (c *cmdChat) Execute(params CommandParams) {
+func (c *cmdSharpRep) Execute(params CommandParams) {
 	sender := gocq.Instance.Sender
-
-	reply := AI.NewAIServer().ProcessMessage(params.Message)
+	reply := AI.NewAIServer().ProcessSharpReviews(params.Message)
 	msgParams := gocq.SendMsgParams{
 		MessageType: params.MessageType,
-		UserID:      params.UserId,
 		GroupID:     params.GroupId,
+		UserID:      params.UserId,
 		Message:     reply,
 		AutoEscape:  false,
 	}
-	slog.Info("调用ai执行指令:/chat")
-
 	sender.SendMsg(msgParams)
+	slog.Info("执行指令：锐评一下")
 }
 
-func (c *cmdChat) GetInfo(index int) string {
+func (c *cmdSharpRep) GetInfo(index int) string {
 	switch index {
 	case COMMAND_INFO_COMMAND:
 		return c.Command
@@ -41,10 +39,10 @@ func (c *cmdChat) GetInfo(index int) string {
 	return ""
 }
 
-func newCmdChat() *cmdChat {
-	return &cmdChat{
-		Command:     "/chat",
-		Description: "聊天指令",
+func newCmdSharpRep() *cmdSharpRep {
+	return &cmdSharpRep{
+		Command:     "锐评一下",
+		Description: "锐评一下xxx",
 		CmdType:     COMMAND_TYPE_ALL,
 	}
 }
