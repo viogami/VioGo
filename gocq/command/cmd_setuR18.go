@@ -10,9 +10,7 @@ import (
 )
 
 type cmdSetuR18 struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdSetuR18) Execute(params CommandParams) {
@@ -38,18 +36,6 @@ func (c *cmdSetuR18) Execute(params CommandParams) {
 		Message: reply,
 	}
 	sender.SendGroupForwardMsg(msgParams)
-}
-
-func (c *cmdSetuR18) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
 }
 
 func (c *cmdSetuR18) getSetuReply(params gocq.SendSetuMsgParams) []cqCode.CQCode {
@@ -91,9 +77,9 @@ func (c *cmdSetuR18) getSetuReply(params gocq.SendSetuMsgParams) []cqCode.CQCode
 }
 
 func newCmdSetuR18() *cmdSetuR18 {
-	return &cmdSetuR18{
-		Command:     "来份r18涩图",
-		Description: "随机r18涩图,规则同上",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdSetuR18)
+	inst.Command = "来份r18涩图"
+	inst.Description = "随机r18涩图,规则同上"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }

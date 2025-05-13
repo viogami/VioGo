@@ -20,7 +20,7 @@ type SetuParams struct {
 }
 
 var CommandList = []Command{
-	newCmdNull(),
+	newBaseCmd(),
 	newCmdHelp(),
 	newCmdChat(),
 	newCmdSetu(),
@@ -38,7 +38,7 @@ var CommandMap = map[string]Command{
 	"打一枪听听":   newCmdHuntSound(),
 	"禁言抽奖":    newCmdBanLottery(),
 	"撤回了什么":   newCmdGetRecall(),
-	"锐评一下":      newCmdSharpRep(),
+	"锐评一下":    newCmdSharpRep(),
 }
 
 const (

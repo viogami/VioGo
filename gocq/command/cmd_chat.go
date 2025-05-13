@@ -8,9 +8,7 @@ import (
 )
 
 type cmdChat struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdChat) Execute(params CommandParams) {
@@ -29,22 +27,10 @@ func (c *cmdChat) Execute(params CommandParams) {
 	sender.SendMsg(msgParams)
 }
 
-func (c *cmdChat) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
-}
-
 func newCmdChat() *cmdChat {
-	return &cmdChat{
-		Command:     "/chat",
-		Description: "聊天指令",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdChat)
+	inst.Command = "/chat"
+	inst.Description = "聊天指令"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }

@@ -7,9 +7,7 @@ import (
 )
 
 type cmdHelp struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdHelp) Execute(params CommandParams) {
@@ -31,18 +29,6 @@ func (c *cmdHelp) Execute(params CommandParams) {
 	slog.Info("执行指令:help", "reply", reply)
 
 	sender.SendMsg(msgParams)
-}
-
-func (c *cmdHelp) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
 }
 
 func (c *cmdHelp) privateReply() string {
@@ -67,9 +53,9 @@ func (c *cmdHelp) groupReply() string {
 }
 
 func newCmdHelp() *cmdHelp {
-	return &cmdHelp{
-		Command:     "help",
-		Description: "查看指令列表",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdHelp)
+	inst.Command = "help"
+	inst.Description = "指令列表"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }

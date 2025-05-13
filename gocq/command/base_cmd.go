@@ -4,17 +4,17 @@ import (
 	"log/slog"
 )
 
-type cmdNull struct {
+type BaseCmd struct {
 	Command     string // 指令名称
 	Description string // 指令描述
 	CmdType     string // 指令类型
 }
 
-func (c *cmdNull) Execute(params CommandParams) {
+func (c *BaseCmd) Execute(params CommandParams) {
 	slog.Info("空指令")
 }
 
-func (c *cmdNull) GetInfo(index int) string {
+func (c *BaseCmd) GetInfo(index int) string {
 	switch index {
 	case COMMAND_INFO_COMMAND:
 		return c.Command
@@ -26,8 +26,8 @@ func (c *cmdNull) GetInfo(index int) string {
 	return ""
 }
 
-func newCmdNull() *cmdNull {
-	return &cmdNull{
+func newBaseCmd() *BaseCmd {
+	return &BaseCmd{
 		Command:     "",
 		Description: "空指令",
 		CmdType:     COMMAND_TYPE_ALL,

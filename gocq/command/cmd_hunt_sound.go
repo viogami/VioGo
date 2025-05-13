@@ -9,9 +9,7 @@ import (
 )
 
 type cmdHuntSound struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdHuntSound) Execute(params CommandParams) {
@@ -41,22 +39,10 @@ func (c *cmdHuntSound) cqReply(soundUrl string) string {
 	return ret.GenerateCQCode()
 }
 
-func (c *cmdHuntSound) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
-}
-
 func newCmdHuntSound() *cmdHuntSound {
-	return &cmdHuntSound{
-		Command:     "打一枪听听",
-		Description: "随机猎杀对决枪声，固定5米",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdHuntSound)
+	inst.Command = "打一枪听听"
+	inst.Description = "随机猎杀对决枪声，固定5米"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }

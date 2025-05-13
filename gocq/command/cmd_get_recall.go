@@ -18,9 +18,7 @@ type redisRecord struct {
 }
 
 type cmdGetRecall struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdGetRecall) Execute(params CommandParams) {
@@ -66,25 +64,13 @@ func (c *cmdGetRecall) Execute(params CommandParams) {
 	slog.Info("执行指令:撤回了什么")
 }
 
-func (c *cmdGetRecall) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
-}
-
 func newCmdGetRecall() *cmdGetRecall {
 	if config.AppConfig.Services.RedisEnabled == false {
 		return nil
 	}
-	return &cmdGetRecall{
-		Command:     "撤回了什么",
-		Description: "获取上一条撤回消息",
-		CmdType:     COMMAND_TYPE_GROUP,
-	}
+	inst := new(cmdGetRecall)
+	inst.Command = "撤回了什么"
+	inst.Description = "撤回了什么"
+	inst.CmdType = COMMAND_TYPE_GROUP
+	return inst
 }

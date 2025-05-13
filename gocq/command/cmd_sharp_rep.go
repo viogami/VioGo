@@ -8,9 +8,7 @@ import (
 )
 
 type cmdSharpRep struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdSharpRep) Execute(params CommandParams) {
@@ -27,22 +25,10 @@ func (c *cmdSharpRep) Execute(params CommandParams) {
 	slog.Info("执行指令：锐评一下")
 }
 
-func (c *cmdSharpRep) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
-}
-
 func newCmdSharpRep() *cmdSharpRep {
-	return &cmdSharpRep{
-		Command:     "锐评一下",
-		Description: "锐评一下xxx",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdSharpRep)
+	inst.Command = "锐评一下"
+	inst.Description = "锐评一下xxx"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }

@@ -10,9 +10,7 @@ import (
 
 var maxDuration = 600 // 最大禁言时间
 type cmdBanLottery struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdBanLottery) Execute(params CommandParams) {
@@ -38,22 +36,10 @@ func (c *cmdBanLottery) Execute(params CommandParams) {
 	slog.Info("执行指令:禁言抽奖")
 }
 
-func (c *cmdBanLottery) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
-}
-
 func newCmdBanLottery() *cmdBanLottery {
-	return &cmdBanLottery{
-		Command:     "禁言抽奖",
-		Description: "禁言抽奖0~600秒",
-		CmdType:     COMMAND_TYPE_GROUP,
-	}
+	inst := new(cmdBanLottery)
+	inst.Command = "禁言抽奖"
+	inst.Description = "禁言抽奖"
+	inst.CmdType = COMMAND_TYPE_GROUP
+	return inst
 }

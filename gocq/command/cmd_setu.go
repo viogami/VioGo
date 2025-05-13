@@ -10,9 +10,7 @@ import (
 )
 
 type cmdSetu struct {
-	Command     string // 指令名称
-	Description string // 指令描述
-	CmdType     string // 指令类型
+	BaseCmd
 }
 
 func (c *cmdSetu) Execute(params CommandParams) {
@@ -38,18 +36,6 @@ func (c *cmdSetu) Execute(params CommandParams) {
 		Message: reply,
 	}
 	sender.SendGroupForwardMsg(msgParams)
-}
-
-func (c *cmdSetu) GetInfo(index int) string {
-	switch index {
-	case COMMAND_INFO_COMMAND:
-		return c.Command
-	case COMMAND_INFO_DESCRIPTION:
-		return c.Description
-	case COMMAND_INFO_CMD_TYPE:
-		return c.CmdType
-	}
-	return ""
 }
 
 func (c *cmdSetu) getSetuReply(params gocq.SendSetuMsgParams) []cqCode.CQCode {
@@ -91,9 +77,9 @@ func (c *cmdSetu) getSetuReply(params gocq.SendSetuMsgParams) []cqCode.CQCode {
 }
 
 func newCmdSetu() *cmdSetu {
-	return &cmdSetu{
-		Command:     "来份涩图",
-		Description: "随机涩图,指令后可接tag,用逗号分隔",
-		CmdType:     COMMAND_TYPE_ALL,
-	}
+	inst := new(cmdSetu)
+	inst.Command = "来份涩图"
+	inst.Description = "随机涩图,指令后可接tag,用逗号分隔"
+	inst.CmdType = COMMAND_TYPE_ALL
+	return inst
 }
