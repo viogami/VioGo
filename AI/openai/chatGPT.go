@@ -9,9 +9,6 @@ import (
 	config "github.com/viogami/viogo/conf"
 )
 
-var APIKey string
-var URL_PROXY string
-
 type ChatGPTService struct {
 	Role             string
 	Character        string
@@ -21,8 +18,8 @@ type ChatGPTService struct {
 }
 
 func NewChatGPTService() *ChatGPTService {
-	URL_PROXY = config.AppConfig.AIConfig.ChatGPTUrlProxy
-	APIKey = os.Getenv("ChatGPTAPIKey")
+	URL_PROXY := config.AppConfig.AIConfig.ChatGPTUrlProxy
+	APIKey := os.Getenv("ChatGPTAPIKey")
 
 	s := new(ChatGPTService)
 	s.Role = openai.ChatMessageRoleUser

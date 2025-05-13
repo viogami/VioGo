@@ -1,19 +1,19 @@
 package deepseek_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/viogami/viogo/AI/deepseek"
 )
 
 func TestInvokeDeepSeekAPI(t *testing.T) {
-	// Create a new DeepSeekService instance
+	os.Setenv("DeepSeekAPIKey", "sk-xxxx")
+
 	service := deepseek.NewDeepSeekService()
 
-	// Define the input text
-	text := "Hello, how are you?"
+	text := "什么是超讽刺和元讽刺？"
 
-	// Call the InvokeDeepSeekAPI method
 	resp := service.InvokeDeepSeekAPI(text)
 	t.Logf("Response: %s", resp)
 }

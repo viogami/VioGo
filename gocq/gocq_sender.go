@@ -48,7 +48,7 @@ func (s *GocqSender) sendToGocq(action string, params map[string]any) (resp RHtt
 	case resp := <-responseChan:
 		if resp.Status != "ok" {
 			Instance.ResponseMap.Delete(echoValue)
-			return resp, fmt.Errorf("api请求失败,错误码: %s, 错误信息: %s", resp.Status, resp.Msg)
+			return resp, fmt.Errorf("api请求失败,状态码: %s, 错误信息: %s", resp.Status, resp.Msg)
 		}
 		slog.Info("收到api响应", "response", resp)
 		return resp, nil

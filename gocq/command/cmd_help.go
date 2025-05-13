@@ -56,10 +56,10 @@ func (c *cmdHelp) privateReply() string {
 }
 
 func (c *cmdHelp) groupReply() string {
-	reply := "指令列表:\n"
+	reply := "指令列表:"
 	for _, v := range CommandList[1:] {
 		if v.GetInfo(2) == "group" || v.GetInfo(2) == "all" {
-			reply += "[" + v.GetInfo(0) + "]:" + v.GetInfo(1) + "\n"
+			reply += "\n" + "[" + v.GetInfo(0) + "]:" + v.GetInfo(1)
 		}
 	}
 	return reply
