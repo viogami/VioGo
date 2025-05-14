@@ -2,6 +2,7 @@ package deepseek
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -17,32 +18,6 @@ type DeepSeekService struct {
 	Messages []message
 }
 
-type DeepSeekPayLoad struct {
-	Messages         []message `json:"messages"`
-	Model            string    `json:"model"`
-	FrequencyPenalty float64   `json:"frequency_penalty"`
-	PresencePenalty  float64   `json:"presence_penalty"`
-	MaxTokens        int       `json:"max_tokens"`
-	ResponseFormat   format    `json:"response_format"`
-	Stop             string    `json:"stop"`
-	Stream           bool      `json:"stream"`
-	StreamOptions    []string  `json:"stream_options"`
-	Temperature      float64   `json:"temperature"`
-	TopP             float64   `json:"top_p"`
-	Tools            []string  `json:"tools"`
-	ToolChoice       string    `json:"tool_choice"`
-	LogProbs         bool      `json:"logprobs"`
-	TopLogProbs      []string  `json:"top_logprobs"`
-}
-
-type message struct {
-	Content string `json:"content"`
-	Role    string `json:"role"`
-}
-type format struct {
-	Type string `json:"type"`
-}
-
 func (s *DeepSeekService) InvokeDeepSeekAPI(text string) string {
 	url := config.AppConfig.AIConfig.DeepSeekUrl
 	key := os.Getenv("DeepSeekAPIKey")
@@ -54,34 +29,18 @@ func (s *DeepSeekService) InvokeDeepSeekAPI(text string) string {
 	// 只保留最后 20 条消息
 	s.trimContext(20)
 
-	payload := DeepSeekPayLoad{
-		Messages:         s.Messages,
-		Model:            s.Model,
-		FrequencyPenalty: 0,
-		PresencePenalty:  0,
-		MaxTokens:        2048,
-		ResponseFormat: format{
-			Type: "text",
-		},
-		Stop:          "",
-		Stream:        false,
-		StreamOptions: nil,
-		Temperature:   1,
-		TopP:          1,
-		Tools:         nil,
-		ToolChoice:    "none",
-		LogProbs:      false,
-		TopLogProbs:   nil,
-	}
+	payload := newDeepSeekPayLoad()
+	payload.Messages = s.Messages
+	payload.Model = s.Model
 
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
-		return string(err.Error())
+		return err.Error()
 	}
 
 	req, err := http.NewRequest("POST", url, strings.NewReader(string(payloadBytes)))
 	if err != nil {
-		return string(err.Error())
+		return err.Error()
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+key)
@@ -94,10 +53,23 @@ func (s *DeepSeekService) InvokeDeepSeekAPI(text string) string {
 
 	responseBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		return string(err.Error())
+		return err.Error()
+	}
+	if res.StatusCode != http.StatusOK {
+		return fmt.Sprintf("请求失败，状态码：%d，响应：%s", res.StatusCode, string(responseBody))
+	}
+
+	// 解析响应
+	encodeRes := DeepSeekResponse{}
+	if err := json.Unmarshal(responseBody, &encodeRes); err != nil {
+		return fmt.Sprintf("解析响应失败：%s", err.Error())
+	}
+	err = s.checkResponse(encodeRes)
+	if err != nil {
+		return err.Error()
 	}
 	// 将 AI 响应添加到上下文
-	responseText := string(responseBody)
+	responseText := encodeRes.Choices[0].Message.Content
 	s.Messages = append(s.Messages, message{
 		Content: responseText,
 		Role:    "assistant",
@@ -118,6 +90,22 @@ func (s *DeepSeekService) trimContext(n int) {
 	if len(s.Messages) > n {
 		s.Messages = append(s.Messages[:1], s.Messages[len(s.Messages)-n:]...)
 	}
+}
+
+func (s *DeepSeekService) checkResponse(encodeRes DeepSeekResponse) error {
+	if len(encodeRes.Choices) == 0 {
+		return fmt.Errorf("没有返回内容")
+	}
+	if encodeRes.Choices[0].FinishReason != "stop" {
+		return fmt.Errorf("请求失败，结束原因：%s", encodeRes.Choices[0].FinishReason)
+	}
+	if encodeRes.Choices[0].Message.Role != "assistant" {
+		return fmt.Errorf("请求失败，角色错误：%s", encodeRes.Choices[0].Message.Role)
+	}
+	if encodeRes.Choices[0].Message.Content == "" {
+		return fmt.Errorf("请求失败，内容为空")
+	}
+	return nil
 }
 
 func (s *DeepSeekService) ClearContext() {
