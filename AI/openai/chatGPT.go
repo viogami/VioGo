@@ -4,10 +4,23 @@ import (
 	"context"
 	"log/slog"
 	"os"
+	"sync"
 
 	openai "github.com/sashabaranov/go-openai"
 	config "github.com/viogami/viogo/conf"
 )
+
+var (
+	instance *ChatGPTService
+	once     sync.Once
+)
+
+func GetInstance() *ChatGPTService {
+	once.Do(func() {
+		instance = NewChatGPTService()
+	})
+	return instance
+}
 
 type ChatGPTService struct {
 	Role             string

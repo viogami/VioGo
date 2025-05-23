@@ -7,9 +7,24 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 
 	config "github.com/viogami/viogo/conf"
 )
+
+var (
+	instance *DeepSeekService
+	once     sync.Once
+)
+
+func GetInstance() *DeepSeekService {
+	once.Do(func() {
+		instance = NewDeepSeekService()
+	})
+	return instance
+}
+
+const MAX_MSG_HISTORY = 20
 
 type DeepSeekService struct {
 	Client *http.Client
@@ -27,7 +42,7 @@ func (s *DeepSeekService) InvokeDeepSeekAPI(text string) string {
 		Role:    "user",
 	})
 	// 只保留最后 20 条消息
-	s.trimContext(20)
+	s.trimContext(MAX_MSG_HISTORY)
 
 	payload := newDeepSeekPayLoad()
 	payload.Messages = s.Messages
@@ -109,13 +124,17 @@ func (s *DeepSeekService) checkResponse(encodeRes DeepSeekResponse) error {
 }
 
 func (s *DeepSeekService) ClearContext() {
-	s.Messages = []message{}
+	newMsgs := make([]message, 0)
+	for _, msg := range s.Messages {
+		msg.Role = "system"
+		newMsgs = append(newMsgs, msg)
+	}
+	s.Messages = newMsgs
 }
 
 func NewDeepSeekService() *DeepSeekService {
 	s := new(DeepSeekService)
 	s.Model = "deepseek-chat"
-
 	s.Client = &http.Client{}
 	s.Messages = []message{}
 	s.setPrompt("你是一个喜欢锐评的贴吧老哥，喜欢用讽刺的语气来表达观点，语言简明干练，一针见血，诙谐幽默又不失风度。")
