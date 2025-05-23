@@ -1,4 +1,3 @@
-
 # VioGo
 
 ![Go Reference](https://pkg.go.dev/badge/github.com/go-telegram-bot-api/telegram-bot-api/v5.svg)
@@ -56,9 +55,3 @@ go build main.go
 ```
 
 之后配置环境变量挂载指定端口即可启动
-
-## 更新
-
-2024/5更新：目前做了一次重大项目重构，使整个项目耦合程度下降，命令通过一个commandList哈希表来控制。websocket的conn不传入业务层，而是向外不断返回一个消息体，最后交给外层的ws连接发送。整个项目更加明了易读。添加了config配置文件，统一管理环境变量的初始化。
-
-2025/4/1更新： 重大重构，基本相当于重写了一边，完善了项目架构，考虑了扩充和ws连接并发处理。具体参考更新文档。

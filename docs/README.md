@@ -36,8 +36,9 @@ AI调用：
 ## 结构说明
 
 - AI： 提供ai服务，从ai_server文件中驱动，子文件为具体的api的调用实现。
-- config： 定义环境变量结构体
-- docs: 文档页面，使用`docsify`
+- conf： 定义环境变量结构体
+- cron: 使用cron包实现定时任务
+- docs: 文档页面，使用 `docsify`
 - gocq： qqbot的业务层核心。
   - command: 最业务层的逻辑，使用各种基础设施和其他服务，完成机器人指令的调用
   - cqCode: 定义qq消息中cq码的结构体，实现编码和解码
