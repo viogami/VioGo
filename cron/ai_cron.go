@@ -1,7 +1,7 @@
 package cron
 
 import (
-	"github.com/viogami/viogo/AI/deepseek"
+	"github.com/viogami/viogo/ai/deepseek"
 )
 
 func clearChatHistory() {

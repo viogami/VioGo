@@ -1,8 +1,8 @@
-package AI
+package ai
 
 import (
-	"github.com/viogami/viogo/AI/deepseek"
-	openai "github.com/viogami/viogo/AI/openai"
+	"github.com/viogami/viogo/ai/deepseek"
+	"github.com/viogami/viogo/ai/openai"
 )
 
 type AIServer struct {

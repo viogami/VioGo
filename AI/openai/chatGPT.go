@@ -1,4 +1,4 @@
-package myopenai
+package openai
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	openai "github.com/sashabaranov/go-openai"
+	goopenai "github.com/sashabaranov/go-openai"
 	config "github.com/viogami/viogo/conf"
 )
 
@@ -27,7 +27,7 @@ type ChatGPTService struct {
 	Character        string
 	characterSetting string
 
-	client *openai.Client
+	client *goopenai.Client
 }
 
 func NewChatGPTService() *ChatGPTService {
@@ -35,14 +35,14 @@ func NewChatGPTService() *ChatGPTService {
 	APIKey := os.Getenv("ChatGPTAPIKey")
 
 	s := new(ChatGPTService)
-	s.Role = openai.ChatMessageRoleUser
+	s.Role = goopenai.ChatMessageRoleUser
 	s.Character = "vio"
 	s.characterSetting = gpt_preset[s.Character]
 
-	conf := openai.DefaultConfig(APIKey)
+	conf := goopenai.DefaultConfig(APIKey)
 	conf.BaseURL = URL_PROXY
 
-	s.client = openai.NewClientWithConfig(conf)
+	s.client = goopenai.NewClientWithConfig(conf)
 
 	return s
 }
@@ -55,11 +55,11 @@ func (s *ChatGPTService) SetCharacter(character string) {
 func (s *ChatGPTService) InvokeChatGPTAPI(text string) string {
 	resp, err := s.client.CreateChatCompletion(
 		context.Background(),
-		openai.ChatCompletionRequest{
-			Model: openai.GPT4o20241120,
-			Messages: []openai.ChatCompletionMessage{
+		goopenai.ChatCompletionRequest{
+			Model: goopenai.GPT4o20241120,
+			Messages: []goopenai.ChatCompletionMessage{
 				{
-					Role:    openai.ChatMessageRoleSystem,
+					Role:    goopenai.ChatMessageRoleSystem,
 					Content: s.characterSetting,
 				},
 				{

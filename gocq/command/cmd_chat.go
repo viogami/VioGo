@@ -3,7 +3,7 @@ package command
 import (
 	"log/slog"
 
-	"github.com/viogami/viogo/AI"
+	AI "github.com/viogami/viogo/ai"
 	"github.com/viogami/viogo/gocq"
 )
 

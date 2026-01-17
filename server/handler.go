@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/viogami/viogo/AI"
+	AI "github.com/viogami/viogo/ai"
 	"github.com/viogami/viogo/gocq"
 	"github.com/viogami/viogo/gocq/event"
 )

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/viogami/viogo/gocq/cqCode"
+	"github.com/viogami/viogo/gocq/cq-code"
 )
 
 var maxWaitingTime = 10 * time.Second // 响应超时时间

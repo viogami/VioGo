@@ -4,7 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/viogami/viogo/gocq"
-	"github.com/viogami/viogo/gocq/cqCode"
+	"github.com/viogami/viogo/gocq/cq-code"
 	"github.com/viogami/viogo/utils"
 )
 

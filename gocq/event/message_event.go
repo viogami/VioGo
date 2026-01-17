@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/viogami/viogo/gocq/command"
-	"github.com/viogami/viogo/gocq/cqCode"
+	"github.com/viogami/viogo/gocq/cq-code"
 	"github.com/viogami/viogo/utils"
 )
 

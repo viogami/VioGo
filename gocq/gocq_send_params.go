@@ -1,6 +1,6 @@
 package gocq
 
-import "github.com/viogami/viogo/gocq/cqCode"
+import "github.com/viogami/viogo/gocq/cq-code"
 
 type SendMsgParams struct {
 	MessageType string `json:"message_type"` // 消息类型, 支持 private、group , 分别对应私聊、群组, 如不传入, 则根据传入的 *_id 参数判断
